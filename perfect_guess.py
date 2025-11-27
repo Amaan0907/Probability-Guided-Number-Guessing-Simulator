@@ -16,7 +16,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="Probability Guided Guessing Number")
 
     parser.add_argument("--max", type=int, help="Maximum range of Number")
-    parser.add_argument("--attempts", type=int, help="MAximum Number Of Attempts")
+    parser.add_argument("--attempts", type=int, help="Maximum Number Of Attempts")
     parser.add_argument("--config", type=str, help="Path to JSON Config")
     
 
@@ -61,3 +61,4 @@ def main():
 
 if __name__=="__main__":
      main()
+          
