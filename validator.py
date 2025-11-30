@@ -4,8 +4,7 @@ from typing import Tuple
 from pathlib import Path
 
 
-class ValidationError(Exception):
-    
+class ValidationError(Exception):  
 
     pass
 
