@@ -14,5 +14,6 @@ readme = "README.md"
 license = { text = "MIT" }
 dependencies = []
 
+
 [project.urls]
 Homepage = "https://github.com/Amaan0907/Probability-Guided-Number-Guessing-Simulator"
