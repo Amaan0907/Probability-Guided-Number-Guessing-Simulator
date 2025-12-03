@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "guess-simulator"         # must be unique on PyPI
+version = "0.1.0"
+description = "Probability-guided number guessing simulator"
+authors = [
+    {name = "Amaan", email = "mohdamaan00907@gmail.com"},
+    {name="Nandini Yadav", email="nandiniyadaventer05@gmail.com"}
+]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Amaan0907/Probability-Guided-Number-Guessing-Simulator"

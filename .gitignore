@@ -47,3 +47,11 @@ backups/
 # OS
 .DS_Store
 Thumbs.db
+
+# PyPI / Package Distribution
+dist/
+build/
+*.egg-info/
+.pypirc
+*.whl
+*.tar.gz
