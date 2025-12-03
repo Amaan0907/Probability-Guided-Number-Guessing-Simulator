@@ -1,8 +1,9 @@
+"""
+Integration tests for the complete system.
+"""
 
 import unittest
-import tempfile
-import shutil
-from pathlib import Path
+import os
 from guess_simulator.game import GameEngine
 from guess_simulator.storage import GameStorage
 from guess_simulator.config import ConfigManager
@@ -13,12 +14,35 @@ class TestIntegration(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        self.test_dir = tempfile.mkdtemp()
-        self.storage = GameStorage(data_dir=str(Path(self.test_dir) / "data"))
+        # Create test directory
+        self.test_dir = "test_temp_integration"
+        self.data_dir = os.path.join(self.test_dir, "data")
+
+        # Make sure directory doesn't exist
+        if os.path.exists(self.test_dir):
+            self._remove_directory(self.test_dir)
+
+        os.makedirs(self.test_dir)
+
+        self.storage = GameStorage(data_dir=self.data_dir)
 
     def tearDown(self):
         """Clean up test fixtures."""
-        shutil.rmtree(self.test_dir)
+        if os.path.exists(self.test_dir):
+            self._remove_directory(self.test_dir)
+
+    def _remove_directory(self, path):
+        """Recursively remove directory."""
+        if os.path.isdir(path):
+            for item in os.listdir(path):
+                item_path = os.path.join(path, item)
+                if os.path.isdir(item_path):
+                    self._remove_directory(item_path)
+                else:
+                    os.remove(item_path)
+            os.rmdir(path)
+        else:
+            os.remove(path)
 
     def test_complete_game_workflow(self):
         """Test a complete game workflow from start to finish."""

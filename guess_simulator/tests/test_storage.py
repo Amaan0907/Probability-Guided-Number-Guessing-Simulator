@@ -1,8 +1,10 @@
+"""
+Unit tests for the storage module.
+"""
 
 import unittest
-import tempfile
-import shutil
-from pathlib import Path
+import os
+import json
 from guess_simulator.storage import GameStorage
 
 
@@ -11,12 +13,35 @@ class TestGameStorage(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        self.test_dir = tempfile.mkdtemp()
-        self.storage = GameStorage(data_dir=str(Path(self.test_dir) / "data"))
+        # Create test directory
+        self.test_dir = "test_temp_storage"
+        self.data_dir = os.path.join(self.test_dir, "data")
+
+        # Make sure directory doesn't exist
+        if os.path.exists(self.test_dir):
+            self._remove_directory(self.test_dir)
+
+        os.makedirs(self.test_dir)
+
+        self.storage = GameStorage(data_dir=self.data_dir)
 
     def tearDown(self):
         """Clean up test fixtures."""
-        shutil.rmtree(self.test_dir)
+        if os.path.exists(self.test_dir):
+            self._remove_directory(self.test_dir)
+
+    def _remove_directory(self, path):
+        """Recursively remove directory."""
+        if os.path.isdir(path):
+            for item in os.listdir(path):
+                item_path = os.path.join(path, item)
+                if os.path.isdir(item_path):
+                    self._remove_directory(item_path)
+                else:
+                    os.remove(item_path)
+            os.rmdir(path)
+        else:
+            os.remove(path)
 
     def test_save_and_load_game(self):
         """Test saving and loading a game."""
@@ -41,7 +66,11 @@ class TestGameStorage(unittest.TestCase):
         """Test loading all games."""
         # Save multiple games
         for i in range(3):
-            game_data = {"game_id": f"test-{i}", "attempts": i + 1, "won": i % 2 == 0}
+            game_data = {
+                "game_id": "test-{}".format(i),
+                "attempts": i + 1,
+                "won": i % 2 == 0,
+            }
             self.storage.save_game(game_data)
 
         # Load all
@@ -55,10 +84,10 @@ class TestGameStorage(unittest.TestCase):
         self.storage.save_game(game_data)
 
         # Export
-        csv_path = str(Path(self.test_dir) / "export.csv")
+        csv_path = os.path.join(self.test_dir, "export.csv")
         success = self.storage.export_to_csv(csv_path)
         self.assertTrue(success)
-        self.assertTrue(Path(csv_path).exists())
+        self.assertTrue(os.path.exists(csv_path))
 
     def test_import_from_csv(self):
         """Test importing games from CSV."""
@@ -71,11 +100,12 @@ class TestGameStorage(unittest.TestCase):
         }
         self.storage.save_game(game_data)
 
-        csv_path = str(Path(self.test_dir) / "import.csv")
+        csv_path = os.path.join(self.test_dir, "import.csv")
         self.storage.export_to_csv(csv_path)
 
         # Create new storage and import
-        new_storage = GameStorage(data_dir=str(Path(self.test_dir) / "data2"))
+        new_data_dir = os.path.join(self.test_dir, "data2")
+        new_storage = GameStorage(data_dir=new_data_dir)
 
         success = new_storage.import_from_csv(csv_path)
         self.assertTrue(success)
