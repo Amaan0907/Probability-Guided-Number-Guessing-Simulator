@@ -1,8 +1,11 @@
+"""
+Simple Storage Module
+Handles basic JSON storage for game data.
+"""
 
 import json
 import csv
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+import os
 from .logger import logger
 
 
@@ -17,25 +20,26 @@ class GameStorage:
     Simple JSON storage for game data.
     """
 
-    def __init__(self, data_dir: str = "game_data"):
+    def __init__(self, data_dir="game_data"):
         """
         Initialize the storage system.
 
         Args:
             data_dir: Directory for game data
         """
-        self.data_dir = Path(data_dir)
+        self.data_dir = data_dir
 
         # Create directory if it doesn't exist
-        self.data_dir.mkdir(parents=True, exist_ok=True)
+        if not os.path.exists(self.data_dir):
+            os.makedirs(self.data_dir)
 
         # File paths
-        self.games_file = self.data_dir / "games.json"
-        self.stats_file = self.data_dir / "statistics.json"
+        self.games_file = os.path.join(self.data_dir, "games.json")
+        self.stats_file = os.path.join(self.data_dir, "statistics.json")
 
-        logger.info(f"Storage initialized: {self.data_dir}")
+        logger.info("Storage initialized: {}".format(self.data_dir))
 
-    def save_game(self, game_data: Dict[str, Any]) -> bool:
+    def save_game(self, game_data):
         """
         Save a game to storage.
 
@@ -69,38 +73,38 @@ class GameStorage:
             with open(self.games_file, "w", encoding="utf-8") as f:
                 json.dump(games, f, indent=2, ensure_ascii=False)
 
-            logger.info(f"Game saved: {game_id}")
+            logger.info("Game saved: {}".format(game_id))
             return True
 
         except Exception as e:
-            logger.error(f"Failed to save game: {e}")
+            logger.error("Failed to save game: {}".format(e))
             return False
 
-    def load_all_games(self) -> List[Dict[str, Any]]:
+    def load_all_games(self):
         """
         Load all games from storage.
 
         Returns:
             List of game dictionaries
         """
-        if not self.games_file.exists():
+        if not os.path.exists(self.games_file):
             return []
 
         try:
             with open(self.games_file, "r", encoding="utf-8") as f:
                 games = json.load(f)
 
-            logger.debug(f"Loaded {len(games)} games from storage")
+            logger.debug("Loaded {} games from storage".format(len(games)))
             return games
 
         except json.JSONDecodeError as e:
-            logger.error(f"Corrupted game data file: {e}")
+            logger.error("Corrupted game data file: {}".format(e))
             return []
         except Exception as e:
-            logger.error(f"Failed to load games: {e}")
+            logger.error("Failed to load games: {}".format(e))
             return []
 
-    def load_game(self, game_id: str) -> Optional[Dict[str, Any]]:
+    def load_game(self, game_id):
         """
         Load a specific game by ID.
 
@@ -116,7 +120,7 @@ class GameStorage:
                 return game
         return None
 
-    def save_statistics(self, stats: Dict[str, Any]) -> bool:
+    def save_statistics(self, stats):
         """
         Save statistics to storage.
 
@@ -134,27 +138,27 @@ class GameStorage:
             return True
 
         except Exception as e:
-            logger.error(f"Failed to save statistics: {e}")
+            logger.error("Failed to save statistics: {}".format(e))
             return False
 
-    def load_statistics(self) -> Dict[str, Any]:
+    def load_statistics(self):
         """
         Load statistics from storage.
 
         Returns:
             Statistics dictionary
         """
-        if not self.stats_file.exists():
+        if not os.path.exists(self.stats_file):
             return self._get_default_statistics()
 
         try:
             with open(self.stats_file, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            logger.error(f"Failed to load statistics: {e}")
+            logger.error("Failed to load statistics: {}".format(e))
             return self._get_default_statistics()
 
-    def _get_default_statistics(self) -> Dict[str, Any]:
+    def _get_default_statistics(self):
         """Get default statistics structure."""
         return {
             "total_games": 0,
@@ -165,7 +169,7 @@ class GameStorage:
             "average_attempts": 0.0,
         }
 
-    def export_to_csv(self, output_path: str) -> bool:
+    def export_to_csv(self, output_path):
         """
         Export all games to CSV format.
 
@@ -194,14 +198,14 @@ class GameStorage:
                 writer.writeheader()
                 writer.writerows(games)
 
-            logger.info(f"Exported {len(games)} games to {output_path}")
+            logger.info("Exported {} games to {}".format(len(games), output_path))
             return True
 
         except Exception as e:
-            logger.error(f"Failed to export to CSV: {e}")
+            logger.error("Failed to export to CSV: {}".format(e))
             return False
 
-    def import_from_csv(self, input_path: str) -> bool:
+    def import_from_csv(self, input_path):
         """
         Import games from CSV format.
 
@@ -229,7 +233,7 @@ class GameStorage:
 
             # Merge with existing games
             existing_games = self.load_all_games()
-            existing_ids = {g.get("game_id") for g in existing_games}
+            existing_ids = set(g.get("game_id") for g in existing_games)
 
             new_games = 0
             for game in imported_games:
@@ -241,9 +245,9 @@ class GameStorage:
             with open(self.games_file, "w", encoding="utf-8") as f:
                 json.dump(existing_games, f, indent=2, ensure_ascii=False)
 
-            logger.info(f"Imported {new_games} new games from {input_path}")
+            logger.info("Imported {} new games from {}".format(new_games, input_path))
             return True
 
         except Exception as e:
-            logger.error(f"Failed to import from CSV: {e}")
+            logger.error("Failed to import from CSV: {}".format(e))
             return False
