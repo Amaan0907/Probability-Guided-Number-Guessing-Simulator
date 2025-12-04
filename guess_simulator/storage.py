@@ -37,7 +37,7 @@ class GameStorage:
         self.games_file = os.path.join(self.data_dir, "games.json")
         self.stats_file = os.path.join(self.data_dir, "statistics.json")
 
-        logger.info("Storage initialized: {}".format(self.data_dir))
+        logger.info(f"Storage initialized: {self.data_dir}")
 
     def save_game(self, game_data):
         """
@@ -73,11 +73,11 @@ class GameStorage:
             with open(self.games_file, "w", encoding="utf-8") as f:
                 json.dump(games, f, indent=2, ensure_ascii=False)
 
-            logger.info("Game saved: {}".format(game_id))
+            logger.info(f"Game saved: {game_id}")
             return True
 
         except Exception as e:
-            logger.error("Failed to save game: {}".format(e))
+            logger.error(f"Failed to save game: {e}")
             return False
 
     def load_all_games(self):
@@ -94,14 +94,14 @@ class GameStorage:
             with open(self.games_file, "r", encoding="utf-8") as f:
                 games = json.load(f)
 
-            logger.debug("Loaded {} games from storage".format(len(games)))
+            logger.debug(f"Loaded {len(games)} games from storage")
             return games
 
         except json.JSONDecodeError as e:
-            logger.error("Corrupted game data file: {}".format(e))
+            logger.error(f"Corrupted game data file: {e}")
             return []
         except Exception as e:
-            logger.error("Failed to load games: {}".format(e))
+            logger.error(f"Failed to load games: {e}")
             return []
 
     def load_game(self, game_id):
@@ -138,7 +138,7 @@ class GameStorage:
             return True
 
         except Exception as e:
-            logger.error("Failed to save statistics: {}".format(e))
+            logger.error(f"Failed to save statistics: {e}")
             return False
 
     def load_statistics(self):
@@ -155,7 +155,7 @@ class GameStorage:
             with open(self.stats_file, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            logger.error("Failed to load statistics: {}".format(e))
+            logger.error(f"Failed to load statistics: {e}")
             return self._get_default_statistics()
 
     def _get_default_statistics(self):
@@ -198,11 +198,11 @@ class GameStorage:
                 writer.writeheader()
                 writer.writerows(games)
 
-            logger.info("Exported {} games to {}".format(len(games), output_path))
+            logger.info(f"Exported {len(games)} games to {output_path}")
             return True
 
         except Exception as e:
-            logger.error("Failed to export to CSV: {}".format(e))
+            logger.error(f"Failed to export to CSV: {e}")
             return False
 
     def import_from_csv(self, input_path):
@@ -245,9 +245,9 @@ class GameStorage:
             with open(self.games_file, "w", encoding="utf-8") as f:
                 json.dump(existing_games, f, indent=2, ensure_ascii=False)
 
-            logger.info("Imported {} new games from {}".format(new_games, input_path))
+            logger.info(f"Imported {new_games} new games from {input_path}")
             return True
 
         except Exception as e:
-            logger.error("Failed to import from CSV: {}".format(e))
+            logger.error(f"Failed to import from CSV: {e}")
             return False

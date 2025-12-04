@@ -68,14 +68,13 @@ class CLI:
             print("\n" + "=" * 60)
             print("🎮 PROBABILITY-GUIDED NUMBER GUESSING SIMULATOR")
             print("=" * 60)
-            print("Difficulty: {}".format(self.config_manager.current_profile.upper()))
+            print(f"Difficulty: {self.config_manager.current_profile.upper()}")
             print(
-                "Range: {} - {}".format(
-                    game_config["min_number"], game_config["max_number"]
-                )
+                f"Range: {game_config['min_number']} - {game_config['max_number']}"
+                
             )
-            print("Maximum Attempts: {}".format(game_config["max_attempts"]))
-            print("Game ID: {}".format(self.current_game.game_id))
+            print(f"Maximum Attempts: {game_config['max_attempts']}")
+            print(f"Game ID: {self.current_game.game_id}")
             print("=" * 60 + "\n")
 
             # Game loop
@@ -83,9 +82,7 @@ class CLI:
                 try:
                     # Get user input
                     guess_input = input(
-                        "Enter your guess ({}-{}): ".format(
-                            self.current_game.min_number, self.current_game.max_number
-                        )
+                        f"Enter your guess ({self.current_game.min_number}-{self.current_game.max_number}): "
                     ).strip()
 
                     if guess_input.lower() in ["quit", "exit", "q"]:
@@ -106,33 +103,29 @@ class CLI:
                     print()
                     if result["correct"]:
                         print(result["message"])
-                        print("🏆 Score: {} attempts".format(result["attempts"]))
+                        print(f"🏆 Score: {result['attempts']} attempts")
                     elif result["game_over"]:
                         print(result["message"])
                     else:
                         print(result["feedback"])
                         if result.get("hint"):
-                            print("💡 Hint: {}".format(result["hint"]))
+                            print(f"💡 Hint: {result['hint']}")
                         print(
-                            "📊 Attempts: {}/{}".format(
-                                result["attempts"], self.current_game.max_attempts
-                            )
+                            f"📊 Attempts: {result['attempts']}/{self.current_game.max_attempts}"
                         )
 
                         # Show probability info if verbose
                         if args.verbose:
                             prob_info = result.get("probability_info", {})
                             print(
-                                "🔍 Remaining possibilities: {}".format(
-                                    prob_info.get("remaining_possibilities", "N/A")
-                                )
+                                f"🔍 Remaining possibilities: {prob_info.get("remaining_possibilities", "N/A")}"
                             )
                     print()
 
                 except ValidationError as e:
-                    print("❌ Invalid input: {}\n".format(e))
+                    print(f"❌ Invalid input: {e}\n")
                 except Exception as e:
-                    print("❌ Error: {}\n".format(e))
+                    print(f"❌ Error: {e}\n")
                     logger.exception("Error during gameplay")
 
             # Save game
@@ -148,24 +141,21 @@ class CLI:
             print("\n" + "=" * 60)
             print("📈 GAME STATISTICS")
             print("=" * 60)
-            print("Status: {}".format(stats["status"].upper()))
+            print(f"Status: {stats["status"].upper()}")
             print(
-                "Attempts: {}/{}".format(
-                    stats["attempts"], self.current_game.max_attempts
-                )
+                f"Attempts: {stats["attempts"]}/{self.current_game.max_attempts}"
             )
-            print("Efficiency: {}%".format(stats["efficiency"]))
-            print("Target Number: {}".format(stats["target_number"]))
-            print(
-                "Guess History: {}".format(", ".join(map(str, stats["guess_history"])))
-            )
+            print(f"Efficiency: {stats["efficiency"]}%")
+            print(f"Target Number: {stats["target_number"]}")
+            print(f"Guess History: {', '.join(map(str, stats['guess_history']))}")
+
             print("=" * 60 + "\n")
 
         except ConfigurationError as e:
-            print("❌ Configuration error: {}".format(e))
+            print(f"❌ Configuration error: {e}")
             sys.exit(1)
         except Exception as e:
-            print("❌ Unexpected error: {}".format(e))
+            print(f"❌ Unexpected error: {e}")
             logger.exception("Unexpected error in play_game")
             sys.exit(1)
 
@@ -188,19 +178,18 @@ class CLI:
             print("\n" + "=" * 60)
             print("📈 OVERALL STATISTICS")
             print("=" * 60)
-            print("Total Games: {}".format(stats["total_games"]))
-            print("Games Won: {}".format(stats["games_won"]))
-            print("Games Lost: {}".format(stats["games_lost"]))
-            print("Win Rate: {}%".format(stats["win_rate"]))
-            print("Total Attempts: {}".format(stats["total_attempts"]))
-            print("Average Attempts: {}".format(stats["average_attempts"]))
-            print("Best Score: {} attempts".format(stats["best_score"] or "N/A"))
-            print("Worst Score: {} attempts".format(stats["worst_score"] or "N/A"))
+            print(f"Total Games: {stats['total_games']}")
+            print(f"Games Won: {stats['games_won']}")
+            print(f"Games Lost: {stats['games_lost']}")
+            print(f"Win Rate: {stats['win_rate']}%")
+            print(f"Total Attempts: {stats['total_attempts']}")
+            print(f"Average Attempts: {stats['average_attempts']}")
+            print(f"Best Score: {stats['best_score'] or 'N/A'} attempts")
+            print(f"Worst Score: {stats['worst_score'] or 'N/A'} attempts")
+
             if stats.get("average_attempts_won"):
                 print(
-                    "Average Attempts (Won Games): {}".format(
-                        stats["average_attempts_won"]
-                    )
+                    f"Average Attempts (Won Games): {stats["average_attempts_won"]}"
                 )
             print("=" * 60 + "\n")
 
@@ -212,14 +201,12 @@ class CLI:
                     status = "WON" if game.get("won") else "LOST"
                     game_id_short = game.get("game_id", "N/A")[:8]
                     print(
-                        "Game {}: {} - {} attempts".format(
-                            game_id_short, status, game.get("attempts", "N/A")
-                        )
+                        f"Game {game_id_short}: {status} - {game.get("attempts", "N/A")} "
                     )
                 print()
 
         except Exception as e:
-            print("❌ Error loading statistics: {}".format(e))
+            print(f"❌ Error loading statistics: {e}")
             logger.exception("Error in show_statistics")
 
     def export_data(self, args):
@@ -233,12 +220,12 @@ class CLI:
             output_path = args.output or "game_export.csv"
 
             if self.storage.export_to_csv(output_path):
-                print("✅ Data exported successfully to: {}".format(output_path))
+                print(f"✅ Data exported successfully to: {output_path}")
             else:
                 print("❌ Failed to export data.")
 
         except Exception as e:
-            print("❌ Export error: {}".format(e))
+            print(f"❌ Export error: {e}")
             logger.exception("Error in export_data")
 
     def import_data(self, args):
@@ -257,14 +244,14 @@ class CLI:
             )
 
             if self.storage.import_from_csv(input_path):
-                print("✅ Data imported successfully from: {}".format(input_path))
+                print(f"✅ Data imported successfully from: {input_path}")
             else:
                 print("❌ Failed to import data.")
 
         except ValidationError as e:
-            print("❌ Validation error: {}".format(e))
+            print("❌ Validation error: {e}")
         except Exception as e:
-            print("❌ Import error: {}".format(e))
+            print(f"❌ Import error: {e}")
             logger.exception("Error in import_data")
 
     def manage_config(self, args):
@@ -281,33 +268,29 @@ class CLI:
                 print("-" * 40)
                 for profile in profiles:
                     config = self.config_manager.get_profile(profile)
-                    print("\n{}:".format(profile.upper()))
+                    print(f"\n{profile.upper()}:")
                     print(
-                        "  Range: {}-{}".format(
-                            config["min_number"], config["max_number"]
-                        )
+                        f"  Range: {config['min_number']}-{config['max_number']}"
                     )
-                    print("  Max Attempts: {}".format(config["max_attempts"]))
+                    print(f"  Max Attempts: {config['max_number']}")
                     print(
-                        "  Hint Frequency: Every {} attempts".format(
-                            config["hint_frequency"]
-                        )
+                        f"  Hint Frequency: Every {config['hint_frequency']} attempts"
                     )
                 print()
 
             elif args.show:
                 profile = args.show
                 config = self.config_manager.get_profile(profile)
-                print("\n⚙️ Profile: {}".format(profile.upper()))
+                print(f"\n⚙️ Profile: {profile.upper()}")
                 print("-" * 40)
                 for key, value in config.items():
-                    print("{}: {}".format(key, value))
+                    print(f"{key}: {value}")
                 print()
 
         except ConfigurationError as e:
-            print("❌ Configuration error: {}".format(e))
+            print(f"❌ Configuration error: {e}")
         except Exception as e:
-            print("❌ Error: {}".format(e))
+            print(f"❌ Error: {e}")
             logger.exception("Error in manage_config")
 
 

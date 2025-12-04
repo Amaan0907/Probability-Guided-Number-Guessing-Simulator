@@ -13,7 +13,7 @@ def generate_game_id():
     """Generate a unique game ID using timestamp and random number."""
     timestamp = str(int(time.time() * 1000))
     random_part = str(random.randint(100000, 999999))
-    return "game-{}-{}".format(timestamp, random_part)
+    return f"game-{timestamp}-{random_part}"
 
 
 class GameEngine:
@@ -133,7 +133,7 @@ class GameEngine:
         result = {
             'correct': True,
             'attempts': self.attempts,
-            'message': "🎉 Congratulations! You guessed it in {} attempts!".format(self.attempts),
+            'message': f"🎉 Congratulations! You guessed it in {self.attempts} attempts!",
             'game_over': True,
             'won': True
         }
@@ -149,7 +149,7 @@ class GameEngine:
         result = {
             'correct': False,
             'attempts': self.attempts,
-            'message': "😞 Game Over! The number was {}.".format(self.target_number),
+            'message': f"😞 Game Over! The number was {self.target_number}.",
             'game_over': True,
             'won': False,
             'target': self.target_number
@@ -202,11 +202,9 @@ class GameEngine:
             temperature = "🧊 Very Cold!"
         
         # Range hint
-        range_hint = "The number is between {} and {}.".format(
-            self.current_min, self.current_max
-        )
+        range_hint = f"The number is between {self.current_min} and {self.current_max}."
         
-        return "{} {}".format(temperature, range_hint)
+        return f"{temperature} {range_hint}"
     
     def _get_range_info(self):
         """Get information about the current possible range."""

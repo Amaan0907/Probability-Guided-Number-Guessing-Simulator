@@ -77,10 +77,9 @@ class ConfigManager:
         """
         if profile_name not in DIFFICULTY_PROFILES:
             available = list(DIFFICULTY_PROFILES.keys())
+            available_str=",".join(available)
             raise ConfigurationError(
-                "Profile '{}' not found. Available profiles: {}".format(
-                    profile_name, ', '.join(available)
-                )
+                f"Profile '{profile_name}' not found. Available profiles: {available_str}"
             )
         
         return DIFFICULTY_PROFILES[profile_name].copy()
@@ -95,7 +94,7 @@ class ConfigManager:
         # Validate profile exists
         self.get_profile(profile_name)
         self.current_profile = profile_name
-        logger.info("Active profile set to: {}".format(profile_name))
+        logger.info(f"Active profile set to: {profile_name}")
     
     def get_current_profile(self):
         """Get the current active profile configuration."""

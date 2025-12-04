@@ -101,26 +101,20 @@ class GameLogger:
     def log_game_start(self, game_id, difficulty, range_info):
         """Log when a game starts."""
         self.info(
-            "Game started - ID: {}, Difficulty: {}, Range: {}-{}".format(
-                game_id, difficulty, range_info["min"], range_info["max"]
-            )
+            f"Game started - ID: {game_id}, Difficulty: {difficulty}, Range: {range_info["min"]}-{range_info["max"]}"
         )
 
     def log_guess(self, game_id, attempt, guess, result):
         """Log a guess."""
         self.debug(
-            "Game {} - Attempt {}: Guess={}, Result={}".format(
-                game_id, attempt, guess, result
-            )
+            f"Game {game_id} - Attempt {attempt}: Guess={guess}, Result={result}"
         )
 
     def log_game_end(self, game_id, won, attempts, target):
         """Log when a game ends."""
         status = "WON" if won else "LOST"
         self.info(
-            "Game ended - ID: {}, Status: {}, Attempts: {}".format(
-                game_id, status, attempts
-            )
+            f"Game ended - ID: {game_id}, Status: {status}, Attempts: {attempts}"
         )
 
 
