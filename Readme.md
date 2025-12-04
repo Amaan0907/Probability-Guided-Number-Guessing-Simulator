@@ -22,8 +22,6 @@ A production-grade CLI application for playing number guessing games with intell
 ### Install from Source
 
 ```bash
-# Clone or download the project
-cd OJT\ 5
 
 # Install in development mode
 python setup.py develop
@@ -267,10 +265,6 @@ python -m unittest discover tests -v
 - **Unit Tests**: Game logic, validation, storage
 - **Integration Tests**: Complete workflows and system integration
 - All tests run in ~0.1 seconds
-
-## 🔧 Troubleshooting
-
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed troubleshooting guide.
 
 ### Common Issues
 
