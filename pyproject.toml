@@ -10,10 +10,26 @@ authors = [
     {name = "Amaan", email = "mohdamaan00907@gmail.com"},
     {name="Nandini Yadav", email="nandiniyadaventer05@gmail.com"}
 ]
-readme = "README.md"
+readme = "Readme.md"
 license = { text = "MIT" }
 dependencies = []
+keywords = ["game", "guessing", "probability", "cli", "simulator"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Games/Entertainment",
+    "Topic :: Education",
+]
 
+[project.scripts]
+guess-sim = "guess_simulator.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Amaan0907/Probability-Guided-Number-Guessing-Simulator"
