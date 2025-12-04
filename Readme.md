@@ -23,11 +23,7 @@ A production-grade CLI application for playing number guessing games with intell
 
 ```bash
 
-# Install in development mode
-python setup.py develop
-
-# Or install normally
-python setup.py install
+pip install -e .
 ```
 
 After installation, the `guess-sim` command will be available globally.
