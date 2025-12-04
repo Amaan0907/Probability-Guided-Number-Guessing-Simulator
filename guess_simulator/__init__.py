@@ -6,8 +6,8 @@ with intelligent probability-based hints and comprehensive game tracking.
 """
 
 __version__ = "1.0.0"
-__author__ = "Your Name"
-__email__ = "your.email@example.com"
+__author__ = "Amaan & Nandini"
+__email__ = "mohdamaan00907@gmail.com & nandiniyadaventer05@gmail.com"
 __license__ = "MIT"
 
 # Package metadata
